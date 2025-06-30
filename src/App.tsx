@@ -10,8 +10,8 @@ import {
 } from "pixi.js";
 import { Viewport } from "./Viewport";
 import { Application, extend } from "@pixi/react";
-import reactSvg from "./assets/react.svg";
-import viteSvg from "./assets/vite.svg";
+import reactSvg from "/react.svg?no-inline";
+import viteSvg from "/vite.svg?no-inline";
 
 // extend tells @pixi/react what Pixi.js components are available
 extend({ Container, Graphics, Sprite });
@@ -36,27 +36,20 @@ function App() {
       graphics.circle(200, 300, 50);
       graphics.fill();
 
-      Assets.add([
-        {
-          alias: "react",
-          src: reactSvg,
-          data: {
-            resolution: 4,
-          },
+      const reactTexture = await Assets.load({
+        src: reactSvg,
+        data: {
+          resolution: 4,
         },
-        {
-          alias: "vite",
-          src: viteSvg,
-          data: {
-            resolution: 4,
-          },
-        },
-      ]);
-
-      const reactTexture = await Assets.load("react");
+      });
       setReactTexture(reactTexture);
 
-      const viteTexture = await Assets.load("vite");
+      const viteTexture = await Assets.load({
+        src: viteSvg,
+        data: {
+          resolution: 4,
+        },
+      });
       setViteTexture(viteTexture);
     })();
   }, []);
@@ -64,6 +57,7 @@ function App() {
   return (
     <>
       <h1>Pixi-Viewport working with React Demo</h1>
+      <p>Try clicking on logos.</p>
       <div id="pixi-container" ref={containerRef}>
         <Application
           resizeTo={containerRef}
